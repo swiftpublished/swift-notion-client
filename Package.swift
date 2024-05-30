@@ -11,8 +11,8 @@ let package = Package(
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
-            name: "SwiftNotionClient",
-            targets: ["SwiftNotionClient"]
+            name: "NotionClient",
+            targets: ["NotionClient"]
         )
     ],
     dependencies: [
@@ -22,18 +22,21 @@ let package = Package(
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "SwiftNotionClient",
+            name: "NotionClient",
             dependencies: [
-                .product(name: "SwiftNotionParsing", package: "swift-notion-parsing")
-            ]
+                .product(name: "NotionParsing", package: "swift-notion-parsing")
+            ],
+            path: "Sources/Client"
         ),
         .executableTarget(
-            name: "SwiftNotionClientExe",
-            dependencies: ["SwiftNotionClient"]
+            name: "NotionClientExe",
+            dependencies: ["NotionClient"],
+            path: "Sources/Exe"
         ),
         .testTarget(
-            name: "SwiftNotionClientTests",
-            dependencies: ["SwiftNotionClient"]
+            name: "NotionClientTests",
+            dependencies: ["NotionClient"],
+            path: "Tests/ClientTests"
         )
     ]
 )

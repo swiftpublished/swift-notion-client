@@ -1,5 +1,5 @@
 import Foundation
-import SwiftNotionParsing
+import NotionParsing
 
 public func fetchPage(by id: String) async throws -> Page {
     let request: URLRequest = try .standard(url: .page(by: id))

@@ -1,4 +1,4 @@
-import SwiftNotionClient
+import NotionClient
 
 //let id = "e97e43ab-fe17-4f47-a6ac-ccc258e4b2ea"
 //do {
