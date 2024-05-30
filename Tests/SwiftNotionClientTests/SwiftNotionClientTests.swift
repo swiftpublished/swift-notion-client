@@ -1,7 +1,7 @@
 import XCTest
-@testable import swift_notion_client
+@testable import SwiftNotionClient
 
-final class swift_notion_clientTests: XCTestCase {
+final class SwiftNotionClientTests: XCTestCase {
     func testExample() throws {
         // XCTest Documentation
         // https://developer.apple.com/documentation/xctest

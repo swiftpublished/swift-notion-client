@@ -5,19 +5,35 @@ import PackageDescription
 
 let package = Package(
     name: "swift-notion-client",
+    platforms: [
+        .macOS(.v13)
+    ],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
-            name: "swift-notion-client",
-            targets: ["swift-notion-client"]),
+            name: "SwiftNotionClient",
+            targets: ["SwiftNotionClient"]
+        )
+    ],
+    dependencies: [
+        .package(path: "../swift-notion-parsing")
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "swift-notion-client"),
+            name: "SwiftNotionClient",
+            dependencies: [
+                .product(name: "SwiftNotionParsing", package: "swift-notion-parsing")
+            ]
+        ),
+        .executableTarget(
+            name: "SwiftNotionClientExe",
+            dependencies: ["SwiftNotionClient"]
+        ),
         .testTarget(
-            name: "swift-notion-clientTests",
-            dependencies: ["swift-notion-client"]),
+            name: "SwiftNotionClientTests",
+            dependencies: ["SwiftNotionClient"]
+        )
     ]
 )
