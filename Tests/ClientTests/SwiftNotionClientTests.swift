@@ -1,5 +1,5 @@
 import XCTest
-@testable import SwiftNotionClient
+@testable import NotionClient
 
 final class SwiftNotionClientTests: XCTestCase {
     func testExample() throws {

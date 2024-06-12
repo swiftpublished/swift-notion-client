@@ -1,7 +1,13 @@
 import Foundation
 import NotionParsing
 
-public func fetchPage(by id: String) async throws -> Page {
+public func fetchPageContent(by id: String) async throws -> Page {
+    var page = try await fetchPage(by: id)
+    page.content = try await fetchContent(by: id)
+    return page
+}
+
+private func fetchPage(by id: String) async throws -> Page {
     let request: URLRequest = try .standard(url: .page(by: id))
 
     do {
@@ -14,7 +20,7 @@ public func fetchPage(by id: String) async throws -> Page {
     }
 }
 
-public func fetchBlocks(by id: String, startCursor: String? = nil) async throws -> Content {
+private func fetchContent(by id: String, startCursor: String? = nil) async throws -> Content {
     let request: URLRequest = try .standard(url: .blocks(by: id, and: startCursor))
 
     do {
@@ -23,13 +29,13 @@ public func fetchBlocks(by id: String, startCursor: String? = nil) async throws 
         var content = try decoder.decode(Content.self, from: data)
 
         if content.hasMore, let nextCursor = content.nextCursor {
-            content.results += try await fetchBlocks(by: id, startCursor: nextCursor).results
+            content.blocks += try await fetchContent(by: id, startCursor: nextCursor).blocks
         }
 
-        for (index, var result) in content.results.enumerated() {
-            if result.hasChildren {
-                result.children = try await fetchBlocks(by: result.id).results
-                content.results[index] = result
+        for (index, var block) in content.blocks.enumerated() {
+            if block.hasChildren {
+                block.children = try await fetchContent(by: block.id).blocks
+                content.blocks[index] = block
             }
         }
 
