@@ -20,7 +20,11 @@ private func fetchPage(by id: String) async throws -> Page {
     }
 }
 
-private func fetchContent(by id: String, startCursor: String? = nil) async throws -> Content {
+private func fetchContent(
+    by id: String, 
+    level: Int? = nil,
+    startCursor: String? = nil
+) async throws -> Content {
     let request: URLRequest = try .standard(url: .blocks(by: id, and: startCursor))
 
     do {
@@ -28,13 +32,21 @@ private func fetchContent(by id: String, startCursor: String? = nil) async throw
         let decoder: JSONDecoder = .standard
         var content = try decoder.decode(Content.self, from: data)
 
+        if let level = level {
+            for (index, var block) in content.blocks.enumerated() {
+                block.level = level
+                content.blocks[index] = block
+            }
+        }
+
         if content.hasMore, let nextCursor = content.nextCursor {
             content.blocks += try await fetchContent(by: id, startCursor: nextCursor).blocks
         }
 
         for (index, var block) in content.blocks.enumerated() {
             if block.hasChildren {
-                block.children = try await fetchContent(by: block.id).blocks
+                let level = (block.level ?? 0) + 1
+                block.children = try await fetchContent(by: block.id, level: level).blocks
                 content.blocks[index] = block
             }
         }
