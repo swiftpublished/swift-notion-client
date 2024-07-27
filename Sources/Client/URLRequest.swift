@@ -1,19 +1,24 @@
 import Foundation
 
 extension URLRequest {
-    static func standard(url: URL) -> Self {
-        Self(url: url)
+    private enum Error: Swift.Error {
+        case noSecret
+    }
+
+    static func standard(url: URL) throws -> Self {
+        try Self(url: url)
             .addingDefaultHeaders()
     }
 
-    private func addingDefaultHeaders() -> Self {
+    private func addingDefaultHeaders() throws -> Self {
+        guard let secret = ProcessInfo.processInfo.environment["SECRET"] else {
+            throw Error.noSecret
+        }
+
         var request = self
 
         request.addValue("2022-06-28", forHTTPHeaderField: "Notion-Version")
-        request.addValue(
-            "Bearer secret_Scnu6Te2fKACKHGbwb1SvEIw4g7XJ14juzRynTwmUsD",
-            forHTTPHeaderField: "Authorization"
-        )
+        request.addValue("Bearer \(secret)", forHTTPHeaderField: "Authorization")
 
         return request
     }
