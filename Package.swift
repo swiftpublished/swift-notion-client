@@ -2,6 +2,7 @@
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
+import class Foundation.ProcessInfo
 
 let package = Package(
     name: "swift-notion-client",
@@ -15,9 +16,6 @@ let package = Package(
             name: "NotionClient",
             targets: ["NotionClient"]
         )
-    ],
-    dependencies: [
-        .package(path: "../swift-notion-parsing")
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -41,3 +39,15 @@ let package = Package(
         )
     ]
 )
+
+/// Local Development Setup
+/// We can set `CI_ENVIRONMENT` in Github to fetch from Remote
+if ProcessInfo.processInfo.environment["CI_ENVIRONMENT"] == "YES" {
+    package.dependencies += [
+        .package(url: "https://github.com/swiftpublished/swift-notion-parsing", branch: "main")
+    ]
+} else {
+    package.dependencies += [
+        .package(path: "../swift-notion-parsing")
+    ]
+}
