@@ -1,13 +1,3 @@
-#if os(Linux)
-import Glibc
-
-let system_glob = Glibc.glob
-#else
-import Darwin
-
-let system_glob = Darwin.glob
-#endif
-
 import Foundation
 
 extension JSONDecoder {

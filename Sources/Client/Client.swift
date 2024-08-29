@@ -1,14 +1,8 @@
-#if os(Linux)
-import Glibc
-
-let system_glob = Glibc.glob
-#else
-import Darwin
-
-let system_glob = Darwin.glob
+import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
 #endif
 
-import Foundation
 import NotionParsing
 
 public func fetchPageContent(by id: String) async throws -> Page {
