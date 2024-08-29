@@ -1,7 +1,7 @@
 import Foundation
-//#if canImport(FoundationNetworking)
-//import FoundationNetworking
-//#endif
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 extension URLRequest {
     private enum Error: Swift.Error {
