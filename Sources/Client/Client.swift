@@ -5,6 +5,22 @@ import FoundationNetworking
 
 import NotionParsing
 
+public func queryDatabasePages(
+    by id: String,
+    and status: Page.Properties.Status.Value
+) async throws -> [Page] {
+    let request: URLRequest = try .database(url: .database(by: id), status: status)
+
+    do {
+        let (data, _) = try await URLSession.shared.data(for: request)
+        let decoder: JSONDecoder = .standard
+        let database = try decoder.decode(Database.self, from: data)
+        return database.pages
+    } catch {
+        throw error
+    }
+}
+
 public func fetchPageContent(by id: String) async throws -> Page {
     var page = try await fetchPage(by: id)
     page.content = try await fetchContent(by: id)

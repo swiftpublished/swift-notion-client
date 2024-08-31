@@ -8,6 +8,14 @@ extension URL {
         case invalidURL
     }
 
+    static func database(by id: String) throws -> Self {
+        guard let url = Self(string: "https://api.notion.com/v1/databases/\(id)/query") else {
+            throw Error.invalidURL
+        }
+
+        return url
+    }
+
     static func page(by id: String) throws -> Self {
         guard let url = Self(string: "https://api.notion.com/v1/pages/\(id)") else {
             throw Error.invalidURL

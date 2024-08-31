@@ -13,15 +13,24 @@ extension URLRequest {
             .addingDefaultHeaders()
     }
 
-    private func addingDefaultHeaders() throws -> Self {
+    func addingDefaultHeaders() throws -> Self {
         guard let secret = ProcessInfo.processInfo.environment["SECRET"] else {
             throw Error.noSecret
         }
 
         var request = self
 
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("2022-06-28", forHTTPHeaderField: "Notion-Version")
         request.addValue("Bearer \(secret)", forHTTPHeaderField: "Authorization")
+
+        return request
+    }
+
+    func post() throws -> Self {
+        var request = self
+
+        request.httpMethod = "POST"
 
         return request
     }
