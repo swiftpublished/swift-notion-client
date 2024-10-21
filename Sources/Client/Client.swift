@@ -52,6 +52,23 @@ private func fetchContent(
         let decoder: JSONDecoder = .standard
         var content = try decoder.decode(Content.self, from: data)
 
+        /// Fetch details about Linked Page
+        for (index, block) in content.blocks.enumerated() {
+            if case .linkedPage(var linkedPage) = block.type {
+                let page = try await fetchPage(by: linkedPage.pageId)
+                linkedPage.title = page.properties.title
+
+                let linkedBlock = Block(
+                    id: block.id,
+                    hasChildren: block.hasChildren,
+                    type: .linkedPage(linkedPage),
+                    level: block.level,
+                    children: block.children
+                )
+                content.blocks[index] = linkedBlock
+            }
+        }
+
         if let level = level {
             for (index, var block) in content.blocks.enumerated() {
                 block.level = level
