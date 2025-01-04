@@ -6,6 +6,12 @@ import FoundationNetworking
 import NotionParsing
 
 extension URLRequest {
+    static func database(url: URL) throws -> Self {
+        try Self(url: url)
+            .post()
+            .addingDefaultHeaders()
+    }
+
     static func database(url: URL, status: Page.Properties.Status.Value) throws -> Self {
         try Self(url: url)
             .post()

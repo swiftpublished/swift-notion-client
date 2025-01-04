@@ -6,6 +6,21 @@ import FoundationNetworking
 import NotionParsing
 
 public func queryDatabasePages(
+    by id: String
+) async throws -> [SponsorPage] {
+    let request: URLRequest = try .database(url: .database(by: id))
+
+    do {
+        let (data, _) = try await URLSession.shared.data(for: request)
+        let decoder: JSONDecoder = .standard
+        let database = try decoder.decode(Database<SponsorPage>.self, from: data)
+        return database.pages
+    } catch {
+        throw error
+    }
+}
+
+public func queryDatabasePages(
     by id: String,
     and status: Page.Properties.Status.Value
 ) async throws -> [Page] {
@@ -14,7 +29,7 @@ public func queryDatabasePages(
     do {
         let (data, _) = try await URLSession.shared.data(for: request)
         let decoder: JSONDecoder = .standard
-        let database = try decoder.decode(Database.self, from: data)
+        let database = try decoder.decode(Database<Page>.self, from: data)
         return database.pages
     } catch {
         throw error
