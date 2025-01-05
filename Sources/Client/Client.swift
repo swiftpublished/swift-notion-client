@@ -5,10 +5,8 @@ import FoundationNetworking
 
 import NotionParsing
 
-public func queryDatabasePages(
-    by id: String
-) async throws -> [SponsorPage] {
-    let request: URLRequest = try .database(url: .database(by: id))
+public func sponsors(by databaseId: String) async throws -> [SponsorPage] {
+    let request: URLRequest = try .database(url: .database(by: databaseId))
 
     do {
         let (data, _) = try await URLSession.shared.data(for: request)
@@ -20,11 +18,8 @@ public func queryDatabasePages(
     }
 }
 
-public func queryDatabasePages(
-    by id: String,
-    and status: Page.Properties.Status.Value
-) async throws -> [Page] {
-    let request: URLRequest = try .database(url: .database(by: id), status: status)
+public func pages(by databaseId: String, and status: Page.Properties.Status.Value) async throws -> [Page] {
+    let request: URLRequest = try .database(url: .database(by: databaseId), status: status)
 
     do {
         let (data, _) = try await URLSession.shared.data(for: request)
